@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARK | Evolution of IdeaRalph</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Space+Grotesk:wght@300;700&display=swap');
+        
+        :root {
+            --neon-green: #00ff96;
+        }
+
+        body {
+            background: #050505;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Background Elements */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 150, 0.05), transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            animation: move-glow 20s infinite alternate;
+        }
+
+        @keyframes move-glow {
+            0% { transform: translate(-30%, -30%); }
+            100% { transform: translate(30%, 30%); }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .grotesk { font-family: 'Space Grotesk', sans-serif; }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #fff, var(--neon-green), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 8s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .loop-box {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loop-box:hover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 150, 0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(0, 255, 150, 0.3);
+        }
+
+        .video-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, var(--neon-green), transparent, var(--neon-green));
+            filter: blur(20px);
+            z-index: -1;
+            opacity: 0.2;
+            border-radius: 24px;
+        }
+
+        /* CA Copier & Socials */
+        .ca-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ca-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--neon-green);
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: rgba(0, 255, 150, 0.1);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            transform: scale(1.1);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* Narrative Annotation */
+        .annotation {
+            position: absolute;
+            z-index: 10;
+            max-width: 280px;
+            pointer-events: none;
+        }
+
+        .annotation-box {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 150, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 150, 0.1);
+            position: relative;
+        }
+
+        .annotation-box::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 1px;
+            background: var(--neon-green);
+        }
+
+        .radar-pulse {
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--neon-green);
+            border-radius: 50%;
+        }
+
+        .radar-pulse::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 1px solid var(--neon-green);
+            border-radius: 50%;
+            animation: pulse-out 2s infinite;
+        }
+
+        @keyframes pulse-out {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        @media (max-width: 1024px) {
+            .annotation {
+                position: relative;
+                max-width: 100%;
+                margin-top: 24px;
+                top: auto !important;
+                right: auto !important;
+                left: auto !important;
+            }
+            .annotation-box::before, .radar-pulse, .connector-line {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 40px 0; }
+            .hero-title { font-size: 4.5rem; line-height: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="bg-grid"></div>
+    <div class="ambient-glow" style="top: 10%; left: 0;"></div>
+    <div class="ambient-glow" style="bottom: 10%; right: 0; animation-delay: -10s;"></div>
+
+    <nav class="w-full max-w-5xl mx-auto flex justify-between items-center py-8 px-6">
+        <div class="grotesk font-bold text-2xl tracking-tighter">SPARK<span class="text-[#00ff96]">.</span></div>
+        <div class="flex items-center gap-4">
+            <div class="h-[1px] w-6 md:w-8 bg-zinc-800"></div>
+            <div class="text-[9px] md:text-[10px] uppercase tracking-widest text-zinc-500 font-bold">The Evolution</div>
+        </div>
+    </nav>
+
+    <main class="w-full max-w-5xl mx-auto px-6">
+        <!-- Hero Section -->
+        <section class="flex flex-col items-center text-center pt-8 pb-16 reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] uppercase tracking-widest text-zinc-400 mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                Intelligence Layer
+            </div>
+            <h1 class="hero-title text-6xl md:text-9xl font-black grotesk mb-6 gradient-text tracking-tighter">SPARK</h1>
+            <p class="text-zinc-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-light mb-12">
+                Out-evolving the legacy loops.
+            </p>
+            
+            <div class="w-full max-w-4xl relative video-glow">
+                <!-- Floating Annotation -->
+                <div class="annotation hidden md:block" style="top: 20%; right: -240px;">
+                    <div class="radar-pulse"></div>
+                    <div class="annotation-box">
+                        <h4 class="text-[9px] uppercase tracking-widest text-[#00ff96] font-black mb-2">Evolution Event</h4>
+                        <p class="text-xs text-zinc-300 leading-relaxed">
+                            Witness the moment <span class="text-white font-bold">IdeaRalph</span> dissolves to reveal the <span class="text-white font-bold">Spark</span> Intelligence Layer. We're not just switching names—we're breaking the silhouette.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass overflow-hidden aspect-video">
+                    <video id="heroVideo" class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto">
+                        <source src="video.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <!-- Mobile Narrative -->
+                <div class="md:hidden mt-8 text-left">
+                    <div class="annotation-box">
+                        <h4 class="text-[9px] uppercase tracking-widest text-[#00ff96] font-black mb-2">The Transition</h4>
+                        <p class="text-xs text-zinc-300 leading-relaxed">
+                            Witness the moment <span class="text-white font-bold">IdeaRalph</span> dissolves to reveal the <span class="text-white font-bold">Spark</span> Intelligence Layer. We're not just switching names—we're breaking the silhouette.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CA & Social Section -->
+        <section class="py-12 flex flex-col items-center gap-8 reveal">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="ca-box group" onclick="copyCA()">
+                    <span class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">CA:</span>
+                    <span id="caText" class="font-mono text-sm tracking-tight text-white group-hover:text-[#00ff96] transition-colors">11111111111111111111111111111111</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-600 group-hover:text-[#00ff96] transition-colors"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="https://x.com/_sparkonsol" class="social-link" target="_blank" title="X (Twitter)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div id="copyToast" class="opacity-0 transition-opacity duration-300 text-[10px] text-[#00ff96] uppercase tracking-widest font-bold">Address Copied</div>
+        </section>
+
+        <!-- The Roots Section -->
+        <section class="grid md:grid-cols-2 gap-8 md:gap-16 items-center border-t border-zinc-900 reveal">
+            <div class="order-2 md:order-1">
+                <h2 class="text-[10px] font-black text-zinc-500 uppercase mb-4 tracking-[0.4em]">The Roots</h2>
+                <h3 class="grotesk text-3xl md:text-4xl font-bold mb-6">Beyond <span class="text-zinc-500">Ralph Wiggum</span></h3>
+                <p class="text-zinc-400 leading-relaxed mb-6 text-sm md:text-base">
+                    IdeaRalph was the start. But the intelligence layer required a cleaner foundation. We shed the constraints of human-first design to build Spark.
+                </p>
+                <div class="flex items-center gap-4 text-xs md:text-sm text-zinc-500">
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-zinc-800 border-2 border-[#050505]"></div>
+                        <div class="w-8 h-8 rounded-full bg-zinc-700 border-2 border-[#050505]"></div>
+                    </div>
+                    <span>From community roots to autonomous agency.</span>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 glass p-6 md:p-10 bg-gradient-to-br from-zinc-900/40 to-black/40">
+                <blockquote class="text-lg md:text-xl italic font-light text-zinc-300">
+                    "Ralph Wiggum dev decided to fock the community, so we built a better loop."
+                </blockquote>
+                <div class="mt-6 flex items-center gap-3">
+                    <div class="w-8 h-[1px] bg-[#00ff96]"></div>
+                    <span class="text-[9px] uppercase tracking-widest text-[#00ff96] font-bold">The Departure</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Loop Section -->
+        <section class="border-t border-zinc-900 reveal">
+            <div class="glass p-6 md:p-12 border-[#00ff96]/20">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 gap-4">
+                    <h2 class="grotesk text-xl md:text-2xl font-bold tracking-tight">SPARK LOOP <span class="text-zinc-600 font-light block md:inline">(24/7 Autonomy)</span></h2>
+                    <div class="px-4 py-1 text-[9px] bg-[#00ff96]/10 text-[#00ff96] border border-[#00ff96]/20 rounded-md font-bold uppercase">Active Engine</div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div class="loop-box p-4 md:p-6 rounded-2xl text-center bg-black/40">
+                        <div class="text-[9px] text-zinc-600 mb-2">PHASE_01</div>
+                        <div class="font-bold text-[10px] md:text-xs tracking-widest uppercase">Observe</div>
+                    </div>
+                    <div class="loop-box p-4 md:p-6 rounded-2xl text-center bg-black/40">
+                        <div class="text-[9px] text-zinc-600 mb-2">PHASE_02</div>
+                        <div class="font-bold text-[10px] md:text-xs tracking-widest uppercase">Decide</div>
+                    </div>
+                    <div class="loop-box p-4 md:p-6 rounded-2xl text-center bg-black/40">
+                        <div class="text-[9px] text-zinc-600 mb-2">PHASE_03</div>
+                        <div class="font-bold text-[10px] md:text-xs tracking-widest uppercase">Act</div>
+                    </div>
+                    <div class="loop-box p-4 md:p-6 rounded-2xl text-center bg-black/40">
+                        <div class="text-[9px] text-zinc-600 mb-2">PHASE_04</div>
+                        <div class="font-bold text-[10px] md:text-xs tracking-widest uppercase">Measure</div>
+                    </div>
+                    <div class="loop-box p-4 md:p-6 rounded-2xl text-center bg-[#00ff96] text-black shadow-[0_0_30px_rgba(0,255,150,0.2)]">
+                        <div class="text-[9px] opacity-60 mb-2 font-bold uppercase">Phase_05</div>
+                        <div class="font-bold text-[10px] md:text-xs tracking-widest uppercase">Learn</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meta Learning Section -->
+        <section class="grid md:grid-cols-2 gap-4 md:gap-8 border-t border-zinc-900 mb-12">
+            <div class="glass p-8 md:p-10 reveal">
+                <h3 class="text-[9px] font-black text-zinc-500 uppercase mb-6 tracking-[0.2em]">Autonomous Meta Learning</h3>
+                <p class="text-zinc-300 text-base md:text-lg leading-relaxed font-light">
+                    It watches every interaction. It remembers across sessions. It doesn't wait for permission—it just evolves.
+                </p>
+                <div class="mt-8 h-1 w-20 bg-zinc-800 overflow-hidden">
+                    <div class="h-full bg-[#00ff96] w-2/3"></div>
+                </div>
+            </div>
+            <div class="glass p-8 md:p-10 reveal">
+                <h3 class="text-[9px] font-black text-zinc-500 uppercase mb-6 tracking-[0.2em]">The Intelligence Layer</h3>
+                <p class="text-zinc-300 text-base md:text-lg leading-relaxed font-light">
+                    "I am the intelligence layer. I evolve myself. I evolve the skills. I evolve the prompts."
+                </p>
+                <p class="mt-4 text-zinc-500 text-xs md:text-sm">
+                    Spark is the environment where code writes itself.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="w-full pb-16 flex flex-col items-center gap-4">
+        <div class="text-[10px] uppercase tracking-[0.4em] text-zinc-600 font-bold">@meta_alchemist x SPARK</div>
+        <div class="h-10 w-[1px] bg-gradient-to-b from-zinc-800 to-transparent"></div>
+    </footer>
+
+    <script>
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        function copyCA() {
+            const caText = document.getElementById('caText').innerText;
+            navigator.clipboard.writeText(caText).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2000);
+            });
+        }
+
+        // Ensure video plays on all browsers
+        window.addEventListener('load', () => {
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.play().catch(error => {
+                    console.log("Autoplay prevented, retrying on interaction", error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
